@@ -1,5 +1,31 @@
 from psychopy import visual
+from random import uniform, choice
 
+
+class circleObj:
+    def __init__(self, window, size, pos, bounds, color, shape):
+        self.window = window
+        self.pos = pos
+        self.size = size
+        self.color = color
+        self.velocity = [uniform(0.5, 1.5)*choice([-1,1]), uniform(0,5, 1.5)*choice([-1,1])]
+        self.bounds = bounds
+    
+    def create(self):
+        pass
+
+    def clear(self):
+        pass
+
+    def change_color(self, new_color):
+        pass
+
+    #Circle Physics
+    def checkCollision(self):
+        pass
+
+    def move(self):
+        pass
 
 class Trial:
     def __init__(self, window, num_objects, colors, size, trial_dur, numCues):
