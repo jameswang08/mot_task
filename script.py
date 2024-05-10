@@ -1,18 +1,19 @@
-from psychopy import visual
-from random import uniform, choice
+from psychopy import visual, core
+from random import uniform, choice, randint
 
 
 class circleObj:
-    def __init__(self, window, size, pos, bounds, color, shape):
+    def __init__(self, window, radius, pos, bounds, color):
         self.window = window
         self.pos = pos
-        self.size = size
+        self.radius = radius
         self.color = color
-        self.velocity = [uniform(0.5, 1.5)*choice([-1,1]), uniform(0,5, 1.5)*choice([-1,1])]
+        self.velocity = [uniform(0.5, 1.5)*choice([-1,1]), uniform(0.5, 1.5)*choice([-1,1])]
         self.bounds = bounds
     
     def create(self):
-        pass
+        self.obj = visual.Circle(self.window, self.radius, pos=self.pos, lineColor=self.color, fillColor=self.color, units='pix')
+        self.obj.setAutoDraw(True)
 
     def clear(self):
         pass
@@ -28,7 +29,7 @@ class circleObj:
         pass
 
 class Trial:
-    def __init__(self, window, num_objects, colors, size, trial_dur, numCues):
+    def __init__(self, window, num_objects, colors, radius, trial_dur, numCues):
         #Display parameters
         self.window = window
         self.background_color = 'black'
@@ -39,7 +40,7 @@ class Trial:
         #Parameters for objects
         self.objects = []
         self.colors = colors
-        self.size = size
+        self.radius = radius
 
         #Trial duration and number of cues per trial
         self.trial_dur = trial_dur
@@ -55,10 +56,26 @@ class Trial:
         self.fixation_y = visual.Line(self.window, start = [-15, 0], end = [15, 0], lineWidth=4, units= 'pix', lineColor=self.fixation_color)
 
     def display(self):
-        pass
+        #Display the circle containing objects
+        self.background.setAutoDraw(True)
+        
+        #Create circle objects
+        self.objects += [circleObj(self.window, self.radius, pos=[randint(-100, 100), randint(-100, 100)], 
+        bounds=self.bounds, color=self.colors[i]) for i in range(self.num_objects)]
+        [object.create() for object in self.objects[::-1]]
+
+        #Display the fixation cross
+        self.fixation_x.setAutoDraw(True)
+        self.fixation_y.setAutoDraw(True)
+        window.flip()
 
     def clear(self):
         pass
 
     def eventLoop(self):
         pass
+
+window = visual.Window([1280, 800], allowGUI=True, monitor='test', color='white', fullscr=False)
+test_trial = Trial(window, 4, ['red']*4, 20, 10, 1)
+test_trial.display()
+core.wait(10)
