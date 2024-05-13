@@ -9,7 +9,7 @@ class Trial:
         self.window = window
         self.background_color = 'black'
         self.num_objects = num_objects
-        self.bounds=[0,0,250] #[x, y, radius]
+        self.bounds=[0,0,window.size[1]/8] #[x, y, radius]
         self.background = visual.Circle(self.window, self.bounds[2], 100, fillColor=self.background_color, units='pix')
 
         #Parameters for objects

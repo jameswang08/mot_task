@@ -1,4 +1,4 @@
-from psychopy import visual, core, event
+from psychopy import visual, core, event, monitors
 from trial import Trial
 from datetime import datetime
 
@@ -34,7 +34,7 @@ def writeData(data):
             csvf.write(','.join(map(str, datum)) + '\n')
 
 #Trial Parameters
-window = visual.Window([1280, 800], allowGUI=True, monitor='testMonitor', color='white', fullscr=False)
+window = visual.Window(allowGUI=True, monitor='testMonitor', color='white', fullscr=True)
 num_objects = 16
 object_colors = ['blue']*2 + ['red']*14
 object_size = 20
