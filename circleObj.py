@@ -26,7 +26,7 @@ class CircleObj:
 
     #Circle Physics
     def checkCollision(self):
-        if(math.dist([0,0], self.pos) >= self.bounds[2] - self.radius/2):
+        if(math.dist([0,0], self.pos) >= self.bounds[2] - self.radius):
             norm_position = np.linalg.norm(self.pos)
             normal = self.pos / norm_position
             dot_product = np.dot(self.velocity, normal)
