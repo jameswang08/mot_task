@@ -21,9 +21,8 @@ class Trial:
         self.trial_dur = trial_dur
         self.numCues = numCues
 
-        #Vars to determine if participant answers correctly
+        #Vars to determine if selected object was a cue
         self.isCue = 0
-        self.response = 0
 
         #Fixation Cross
         self.fixation_color = 'white'
@@ -63,9 +62,12 @@ class Trial:
             #In the last two seconds of the trial, ask participant if the highlighted object was a cue
             if self.timer.getTime() > self.trial_dur - 2:
                 rand_index = randint(0, self.num_objects-1)
-                self.bounces = 1 if 0 <= rand_index <= self.numCues-1 else 0
+                self.isCue = 1 if 0 <= rand_index <= self.numCues-1 else 0
                 self.objects[rand_index].change_color('white')
                 self.window.flip()
                 break
         time.sleep(2)
         self.clear()
+    
+    def getIsCue(self):
+        return self.isCue
