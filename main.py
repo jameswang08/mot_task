@@ -1,5 +1,6 @@
 from psychopy import visual, core, event
 from trial import Trial
+from datetime import datetime
 
 #Helper functions
 
@@ -15,6 +16,22 @@ def displayTxt(window, message, input = False, size = 1):
     else:
         keys = event.waitKeys(keyList=['0', '1'])
     return keys
+
+#write data to csv file
+def writeData(data):
+    # Get current date and time
+    now = datetime.now()
+    # Format as string
+    dt_string = now.strftime("%Y-%m-%d_%H-%M-%S")
+    filename = dt_string + '.csv'
+
+    #write data to csv file
+    with open(filename, 'w') as csvf:
+        csvf.write('User Resopnse, Ground Truth\n')
+        for datum in data:
+            csvf.write(','.join(map(str, datum)) + '\n')
+
+
 
 def main():
     window = visual.Window([1280, 800], allowGUI=True, monitor='test', color='white', fullscr=False)
