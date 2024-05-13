@@ -15,6 +15,8 @@ def displayTxt(window, message, input = False, size = 1):
         event.waitKeys()
     else:
         keys = event.waitKeys(keyList=['0', '1'])
+        if keys:
+            keys = int(keys[0])
     return keys
 
 #write data to csv file
@@ -31,14 +33,29 @@ def writeData(data):
         for datum in data:
             csvf.write(','.join(map(str, datum)) + '\n')
 
+#Trial Parameters
+window = visual.Window([1280, 800], allowGUI=True, monitor='testMonitor', color='white', fullscr=False)
+num_objects = 16
+object_colors = ['blue']*2 + ['red']*14
+object_size = 20
+trial_duration = 10
+numCues = 2
 
+#Number of trials to run
+num_trials = 2
 
 def main():
-    window = visual.Window([1280, 800], allowGUI=True, monitor='test', color='white', fullscr=False)
-    test_trial = Trial(window, 4, ['blue']+['red']*3, 20, 10, 1)
-    test_trial.display()
-    test_trial.eventLoop()
-    core.wait(10)
+    #Trail Data
+    trial_data = []
+
+    for _ in range(num_trials):
+        displayTxt(window, "Some Instruction")
+        test_trial = Trial(window, num_objects, object_colors, object_size, trial_duration, numCues)
+        test_trial.display()
+        test_trial.eventLoop()
+        response = displayTxt(window, "Was this circle origionally blue?\n0 - No\n1 - Yes", input=True)
+        trial_data += [(response, test_trial.getIsCue())]
+    writeData(trial_data)
 
 if __name__ == "__main__":
     main()
