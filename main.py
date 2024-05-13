@@ -33,22 +33,64 @@ def writeData(data):
         for datum in data:
             csvf.write(','.join(map(str, datum)) + '\n')
 
-#Trial Parameters
-window = visual.Window(allowGUI=True, monitor='testMonitor', color='white', fullscr=True)
-num_objects = 16
-object_colors = ['blue']*2 + ['red']*14
-object_size = 20
-trial_duration = 10
-numCues = 2
 
-#Number of trials to run
-num_trials = 2
 
 def main():
-    #Trail Data
+    #Trial Parameters
+    window = visual.Window(allowGUI=True, monitor='testMonitor', color='white', fullscr=True)
+    num_objects = 16
+    object_colors = ['blue']*2 + ['red']*14
+    object_size = 10
+    trial_duration = 10
+    numCues = 2
+
+    #Number of trials to run
+    num_trials = 45
+        #Practice Trial
+        #Practice Trial where user repeats until they get 3/4 trials correct
+    while True:
+        correct = 0
+        num = 8
+        colors = []
+        nCues = 0
+        for trial in range(4):
+            if(trial<2):
+                nCues = 1
+                colors = ['blue']*1 + ['red']*7
+            else:
+                nCues = 2
+                colors = ['blue']*2 + ['red']*6
+            displayTxt(window, "Some Instruction")
+            test_trial = Trial(window, num, colors, object_size, trial_duration, nCues)
+            test_trial.display()
+            test_trial.eventLoop()
+            response = displayTxt(window, "Was this circle origionally blue?\n0 - No\n1 - Yes", input=True)
+            if(test_trial.getIsCue()==response):
+                correct+=1
+        if(correct>=3):
+            break
+        else:
+            displayTxt(window, "Try Again!")
+            core.wait(2)
+
+
+    #Trial Data
     trial_data = []
 
     for _ in range(num_trials):
+        if(_ == 10):
+            nCue = 3
+            object_colors = ['blue']*3 + ['red']*13
+        elif(_ == 20):
+            nCue = 4
+            object_colors = ['blue']*4 + ['red']*12
+        elif(_ == 30):
+            nCue = 5
+            object_colors = ['blue']*5 + ['red']*11
+        elif(_ == 40):
+            nCue = 1
+            object_colors = ['blue']*1 + ['red']*15
+
         displayTxt(window, "Some Instruction")
         test_trial = Trial(window, num_objects, object_colors, object_size, trial_duration, numCues)
         test_trial.display()
