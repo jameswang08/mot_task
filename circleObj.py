@@ -1,5 +1,7 @@
 from psychopy import visual
 from random import uniform, choice, randint
+import math
+import numpy as np
 
 class CircleObj:
     def __init__(self, window, radius, pos, bounds, color):
@@ -15,14 +17,24 @@ class CircleObj:
         self.obj.setAutoDraw(True)
 
     def clear(self):
-        pass
+        self.obj.setAutoDraw(False)
 
     def change_color(self, new_color):
-        pass
+        self.color = new_color
+        self.obj.setFillColor(new_color)
+        self.obj.setLineColor(new_color)
 
     #Circle Physics
     def checkCollision(self):
-        pass
+        if(math.dist([0,0], self.pos) >= self.bounds[2] - self.radius/2):
+            norm_position = np.linalg.norm(self.pos)
+            normal = self.pos / norm_position
+            dot_product = np.dot(self.velocity, normal)
+            reflection_vector = self.velocity - 2 * dot_product * normal
+            self.velocity = reflection_vector
 
     def move(self):
-        pass
+        self.checkCollision()
+        self.pos[0] += self.velocity[0]
+        self.pos[1] += self.velocity[1]
+        self.obj.setPos((self.pos[0], self.pos[1]))
