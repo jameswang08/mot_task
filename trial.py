@@ -1,6 +1,7 @@
-from psychopy import visual
+from psychopy import visual, core
 from random import randint
 from circleObj import CircleObj
+import time
 
 class Trial:
     def __init__(self, window, num_objects, colors, radius, trial_dur, numCues):
@@ -44,7 +45,27 @@ class Trial:
         self.window.flip()
 
     def clear(self):
-        pass
+        self.background.setAutoDraw(False)
+        self.fixation_x.setAutoDraw(False)
+        self.fixation_y.setAutoDraw(False)
+        [object.clear() for object in self.objects]
+        self.window.flip()
 
     def eventLoop(self):
-        pass
+        self.timer = core.Clock()
+        while self.timer.getTime() < self.trial_dur:
+            [object.move() for object in self.objects]
+            self.window.flip()
+            #Display cue for 2 seconds
+            if self.timer.getTime() > 1.95 and self.timer.getTime() < 2.05:
+                for _ in range(self.numCues):
+                    self.objects[_].change_color('red')
+            #In the last two seconds of the trial, ask participant if the highlighted object was a cue
+            if self.timer.getTime() > self.trial_dur - 2:
+                rand_index = randint(0, self.num_objects-1)
+                self.bounces = 1 if 0 <= rand_index <= self.numCues-1 else 0
+                self.objects[rand_index].change_color('white')
+                self.window.flip()
+                break
+        time.sleep(2)
+        self.clear()
